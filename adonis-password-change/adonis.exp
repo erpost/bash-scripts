@@ -1,0 +1,46 @@
+#!/usr/bin/expect -f
+
+#exp_internal 1
+set force_conservative 1
+
+
+set ip [lindex $argv 0]
+set currentrootpw [lindex $argv 1]
+set newrootpw [lindex $argv 2]
+set newadminpw [lindex $argv 3]
+set timeout -1
+
+match_max 100000
+
+spawn ssh -x root@$ip
+expect {
+  "password:" {
+     send -- "$currentrootpw\r"
+    }
+  "timed out" {
+     puts "&Failure: $ip (Not Accessible)"
+     exit
+    }
+}
+expect {
+  "#" {
+     send -- "passwd\r"
+    }
+  "please try again.\r" {
+     puts "&Failure: $ip (Bad Root Password)"
+     exit
+    }
+}
+expect "Enter new UNIX password:"
+send -- "$newrootpw\r"
+expect "Retype new UNIX password:"
+send -- "$newrootpw\r"
+expect "passwd: password updated successfully"
+send -- "passwd admin\r"
+expect "Enter new UNIX password: "
+send -- "$newadminpw\r"
+expect "Retype new UNIX password: "
+send -- "$newadminpw\r"
+expect "passwd: password updated successfully"
+puts "&Success: $ip"
+send -- "exit\r"
