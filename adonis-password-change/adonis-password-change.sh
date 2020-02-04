@@ -7,7 +7,7 @@ rm -f adonis.log
 
 echo -e '\n'
 echo -----------------------------------------------------------------------------
-echo '|This Script Will Change the ROOT and ADMIN Passwords for Trustwave Adonis Devices.|'
+echo '|This Script Will Change the ROOT and ADMIN Passwords for BlueCat Adonis Devices.|'
 echo -----------------------------------------------------------------------------
 echo -e '\n'
 echo What is the current ROOT password?
